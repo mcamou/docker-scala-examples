@@ -12,7 +12,8 @@ object ReactiveDocker extends App {
 
   val containerName = "reactive-docker"
   //val imageTag = RepositoryTag.create("mongo:2.3.6", Some("latest"))
-  val cfg = ContainerConfiguration(Some("mongo:2.6.12"))
+  val cmd = Seq("mongod", "--nojournal", "--smallfiles", "--syncdelay", "0")
+  val cfg = ContainerConfiguration(Some("mongo:2.6.12"), Some(cmd))
 
   // create image, returns a list of docker messages when finished
   //val messages = Await.result(docker.imageCreate(imageTag), timeout)
@@ -20,9 +21,9 @@ object ReactiveDocker extends App {
   //messages.foreach(m => println(s"imageCreate: $m"))
 
   // create container
-  val (containerId, warnings) = Await.result(docker.containerCreate("mongo:2.6.5", cfg, Some(containerName)), timeout)
+  val (containerId, _) = Await.result(docker.containerCreate("mongo:2.6.5", cfg, Some(containerName)), timeout)
 
-  warnings foreach { println }
+  //warnings foreach { println }
 
   // run container
   Await.ready(docker.containerStart(containerId), timeout)

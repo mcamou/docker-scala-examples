@@ -23,8 +23,9 @@ object JavaApi extends App {
     .exec
 
   docker.startContainerCmd(container.getId).exec
+  println(s"Container ${container.getId} started, waiting 60 sec")
 
-  println("Container started")
+  Thread.sleep(60000)
 
   docker.stopContainerCmd(container.getId).exec
   val exitcode = docker.waitContainerCmd(container.getId).exec
